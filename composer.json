@@ -1,0 +1,47 @@
+{
+  "name": "rarus/rarus-kkt-php-sdk",
+  "description": "1C-Rarus KKT PHP SDK",
+  "keywords": [
+    "Rarus",
+    "PHP",
+    "REST",
+    "API"
+  ],
+  "type": "library",
+  "homepage": "https://rarus.ru",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Grishin Mikhail",
+      "email": "grishi@rarus.ru",
+      "homepage": "https://rarus.ru"
+    }
+  ],
+  "require": {
+    "php": ">=7.0",
+    "ext-json": "*",
+    "ext-curl": "*",
+    "psr/log": "^1.0",
+    "fig/http-message-util":"*",
+    "monolog/monolog": "1.*",
+    "guzzlehttp/guzzle": "6.x",
+    "moneyphp/money": "^3.0"
+  },
+  "require-dev": {
+    "jakub-onderka/php-parallel-lint": "0.9",
+    "jakub-onderka/php-console-highlighter": "~0.3",
+    "phpunit/phpunit": "6.*"
+
+  },
+  "autoload": {
+    "psr-4": {
+      "Rarus\\Online\\Kkt\\": "src/Rarus/Online/Kkt"
+    }
+  },
+  "scripts": {
+    "test": [
+      "parallel-lint . --exclude vendor --no-colors",
+      "phpunit --colors=always --verbose"
+    ]
+  }
+}
