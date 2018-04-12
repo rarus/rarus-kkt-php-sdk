@@ -50,7 +50,7 @@ class Ping
     /**
      * @param string $message
      */
-    protected function setMessage(string $message): void
+    protected function setMessage(string $message)
     {
         $this->message = $message;
     }
