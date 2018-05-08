@@ -21,7 +21,7 @@ use Monolog\Processor\UidProcessor;
 // инициализируем логи
 $log = new Logger('rarus-kkt-php-sdk');
 
-$handler = new SocketHandler('udp://194.226.180.89:5043');
+$handler = new SocketHandler('udp://199.999.999.99:9999');
 $handler->setFormatter(new LogstashFormatter('rarus-kkt-php-sdk'));
 
 // Ignore Handler's exceptions
