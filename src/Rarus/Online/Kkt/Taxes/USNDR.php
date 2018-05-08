@@ -21,5 +21,5 @@ class USNDR extends AbstractTax
     /**
      * @var string наименование налогообложения
      */
-    protected $taxName = 'УСНО (доходы минус расходы )';
+    protected $taxName = 'УСНО (доходы минус расходы)';
 }
