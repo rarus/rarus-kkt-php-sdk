@@ -21,19 +21,6 @@ use Monolog\Processor\UidProcessor;
 // инициализируем логи
 $log = new Logger('rarus-kkt-php-sdk');
 
-$handler = new SocketHandler('udp://199.999.999.99:9999');
-$handler->setFormatter(new LogstashFormatter('rarus-kkt-php-sdk'));
-
-// Ignore Handler's exceptions
-// @param array — array of our handlers
-$log->pushHandler(new WhatFailureGroupHandler([$handler]));
-$log->pushProcessor(new MemoryUsageProcessor());
-$log->pushProcessor(new Monolog\Processor\MemoryUsageProcessor);
-$log->pushProcessor(new Monolog\Processor\MemoryPeakUsageProcessor);
-$log->pushProcessor(new Monolog\Processor\IntrospectionProcessor);
-$log->pushProcessor(new UidProcessor());
-
-
 $log->pushHandler(new \Monolog\Handler\StreamHandler('rarus-kkt-php-sdk.log', Logger::DEBUG));
 
 $guzzleHandlerStack = HandlerStack::create();
