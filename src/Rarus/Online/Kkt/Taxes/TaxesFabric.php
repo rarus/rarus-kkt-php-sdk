@@ -36,6 +36,9 @@ class TaxesFabric
             case $taxCode === 'ESXN':
                 $taxSystem = new ESXN();
                 break;
+            case $taxCode === 'USNDR':
+                $taxSystem = new USNDR();
+                break;
             default:
                 throw new InvalidTaxCodeException(\sprintf('incorrect tax code [%s]', $taxCode));
         }
