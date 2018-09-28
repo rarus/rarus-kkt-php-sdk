@@ -27,10 +27,10 @@ class TaxesFabric
             case $taxCode === 'USN':
                 $taxSystem = new USN();
                 break;
-            case $taxCode === 'PNS':
+            case $taxCode === 'PSN':
                 $taxSystem = new PSN();
                 break;
-            case $taxCode === 'ENDV':
+            case $taxCode === 'ENVD':
                 $taxSystem = new ENVD();
                 break;
             case $taxCode === 'ESXN':
