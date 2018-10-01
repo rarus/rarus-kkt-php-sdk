@@ -7,7 +7,7 @@ declare(strict_types=1);
 namespace Rarus\Online\Kkt\Taxes;
 
 /**
- * Class OSN
+ * Class USN
  *
  * @package Rarus\Online\Kkt\Taxes
  */
