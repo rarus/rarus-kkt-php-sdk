@@ -143,7 +143,6 @@ class Transport extends AbstractTransport
         $serializePrecision = \ini_get('serialize_precision');
 
         $documentArray['total'] = (float)$moneyFormatter->format($documentArray['total']);
-
         // Устанавливаем значение serialize_precision в -1.
         // TODO на данный момент есть баг с преобразованием float в json_encode,
         // TODO хотя пишут что Status: Closed https://bugs.php.net/bug.php?id=72567
@@ -210,6 +209,10 @@ class Transport extends AbstractTransport
         $moneyParser = new DecimalMoneyParser(new ISOCurrencies());
 
         $total = $moneyParser->parse((string)$documentState['fiscalization']['total'], 'RUB');
+        $credit = (string)$documentState['fiscalization']['credit'];
+        $advance_payment = (string)$documentState['fiscalization']['advance_payment'];
+        $cash = (string)$documentState['fiscalization']['cash'];
+        $barter = (string)$documentState['fiscalization']['barter'];
 
         $fiscalisation = new Fiscalisation(
             $total,
@@ -220,7 +223,11 @@ class Transport extends AbstractTransport
             (string)$documentState['fiscalization']['kkt_registration_number'],
             (int)$documentState['fiscalization']['fiscal_attribute'],
             (int)$documentState['fiscalization']['fiscal_doc_number'],
-            (string)$documentState['fiscalization']['fns_site']
+            (string)$documentState['fiscalization']['fns_site'],
+            $credit,
+            $advance_payment,
+            $cash,
+            $barter
         );
 
         $this->log->info('rarus.online.kkt.Queue.Transport.' . __FUNCTION__ . '.finish');

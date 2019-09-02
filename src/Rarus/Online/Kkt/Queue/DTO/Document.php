@@ -6,6 +6,8 @@ declare(strict_types=1);
 
 namespace Rarus\Online\Kkt\Queue\DTO;
 
+use Money\Currencies\ISOCurrencies;
+use Money\Formatter\DecimalMoneyFormatter;
 use Money\Money;
 use Rarus\Online\Kkt\Taxes\TaxInterface;
 
@@ -60,8 +62,56 @@ class Document
      * @var \Rarus\Online\Kkt\Queue\DTO\ProductCollection
      */
     protected $items;
-
     /**
+     * @var \Rarus\Online\Kkt\Queue\DTO\AgentInfo
+     */
+    protected $agentInfo;
+    /**
+     * @var \Rarus\Online\Kkt\Queue\DTO\SupplierInfo
+     */
+    protected $supplierInfo;
+    /**
+     * @var string тег 1021
+     */
+    protected $cashier;
+    /**
+     * @var string тег 1192
+     */
+    protected $additionalCheckProps;
+    /**
+     * @var string тег 1227 Покупатель
+     */
+    protected $customerInfo;
+    /**
+     * @var string тег 1228 ИНН покупателя
+     */
+    protected $customerInn;
+    /**
+     * @var string наименование дополнительного реквизита пользователя
+     */
+    protected $nameAdditionalUserDetails;
+    /**
+     * @var string значение дополнительного реквизита пользователя
+     */
+    protected $valueAdditionalUserDetails;
+    /**
+     * @var float Кредит - example: 60.89
+     */
+    protected $credit;
+    /**
+     * @var float Аванс - example: 60.89
+     */
+    protected $advancePayment;
+    /**
+     * @var float Сумма наличными - example: 60.89
+     */
+    protected $cash;
+    /**
+     * @var float Сумма встречного представления - example: 60.89
+     */
+    protected $barter;
+
+      /**
      * Document constructor.
      *
      * @param string                                        $externalId
@@ -75,6 +125,18 @@ class Document
      * @param string                                        $paymentAddress
      * @param \Money\Money                                  $total
      * @param \Rarus\Online\Kkt\Queue\DTO\ProductCollection $items
+     * @param \Rarus\Online\Kkt\Queue\DTO\AgentInfo         $agentInfo
+     * @param \Rarus\Online\Kkt\Queue\DTO\SupplierInfo      $supplierInfo
+     * @param string                                        $cashier
+     * @param string                                        $additionalCheckProps
+     * @param string                                        $customerInfo
+     * @param string                                        $customerInn
+     * @param string                                        $nameAdditionalUserDetails
+     * @param string                                        $valueAdditionalUserDetails
+     * @param \Money\Money                                  $credit
+     * @param \Money\Money                                  $advancePayment
+     * @param \Money\Money                                  $cash
+     * @param \Money\Money                                  $barter
      */
     public function __construct(
         string $externalId,
@@ -87,7 +149,19 @@ class Document
         string $inn,
         string $paymentAddress,
         Money $total,
-        ProductCollection $items
+        ProductCollection $items,
+        AgentInfo $agentInfo,
+        SupplierInfo $supplierInfo,
+        string $cashier = '',
+        string $additionalCheckProps = '',
+        string $customerInfo = '',
+        string $customerInn = '',
+        string $nameAdditionalUserDetails = '',
+        string $valueAdditionalUserDetails = '',
+        Money $credit,
+        Money $advancePayment,
+        Money $cash,
+        Money $barter
     ) {
         $this->setExternalId($externalId);
         $this->setDocType($docType);
@@ -100,6 +174,18 @@ class Document
         $this->setPaymentAddress($paymentAddress);
         $this->setTotal($total);
         $this->setItems($items);
+        $this->setAgentInfo($agentInfo);
+        $this->setSupplierInfo($supplierInfo);
+        $this->setCashier($cashier);
+        $this->setAdditionalCheckProps($additionalCheckProps);
+        $this->setCustomerInfo($customerInfo);
+        $this->setCustomerInn($customerInn);
+        $this->setNameAdditionalUserDetails($nameAdditionalUserDetails);
+        $this->setValueAdditionalUserDetails($valueAdditionalUserDetails);
+        $this->setCredit($credit);
+        $this->setAdvancePayment($advancePayment);
+        $this->setCash($cash);
+        $this->setBarter($barter);
     }
 
     /**
@@ -108,17 +194,29 @@ class Document
     public function toArray(): array
     {
         return [
-            'id'              => $this->getExternalId(),
-            'doc_type'        => $this->getDocType(),
-            'timestamp_utc'   => $this->getTimestampUtc()->getTimestamp(),
-            'timestamp_local' => $this->getTimestampLocal()->getTimestamp(),
-            'email'           => $this->getUser()->getEmail(),
-            'phone'           => $this->getUser()->getPhone(),
-            'tax_system'      => $this->getTaxSystem()->getTaxCode(),
-            'call_back_uri'   => $this->getCallBackUri(),
-            'inn'             => $this->getInn(),
-            'payment_address' => $this->getPaymentAddress(),
-            'total'           => $this->getTotal()
+            'id'                     => $this->getExternalId(),
+            'doc_type'               => $this->getDocType(),
+            'timestamp_utc'          => $this->getTimestampUtc()->getTimestamp(),
+            'timestamp_local'        => $this->getTimestampLocal()->getTimestamp(),
+            'email'                  => $this->getUser()->getEmail(),
+            'phone'                  => $this->getUser()->getPhone(),
+            'tax_system'             => $this->getTaxSystem()->getTaxCode(),
+            'call_back_uri'          => $this->getCallBackUri(),
+            'inn'                    => $this->getInn(),
+            'payment_address'        => $this->getPaymentAddress(),
+            'total'                  => $this->getTotal(),
+            'agent_info'             => $this->getAgentInfo()->toArray(),
+            'supplier_info'          => $this->getSupplierInfo()->toArray(),
+            'cashier'                => $this->getCashier(),
+            'additional_check_props' => $this->getAdditionalCheckProps(),
+            'customer_info'          => $this->getCustomerInfo(),
+            'customer_inn'           => $this->getCustomerInn(),
+            'tag_1085'               => $this->getNameAdditionalUserDetails(),
+            'tag_1086'               => $this->getValueAdditionalUserDetails(),
+            'credit'                 => $this->getCredit(),
+            'advance_payment'        => $this->getAdvancePayment(),
+            'cash'                   => $this->getCash(),
+            'barter'                 => $this->getBarter()
         ];
     }
 
@@ -328,6 +426,241 @@ class Document
     protected function setItems(\Rarus\Online\Kkt\Queue\DTO\ProductCollection $items): Document
     {
         $this->items = $items;
+        return $this;
+    }
+
+    /**
+     * @param mixed $agentInfo
+     *
+     * @return
+     */
+    public function setAgentInfo($agentInfo)
+    {
+        $this->agentInfo = $agentInfo;
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getAgentInfo(): AgentInfo
+    {
+        return $this->agentInfo;
+    }
+
+    /**
+     * @param $supplierInfo
+     *
+     * @return $this
+     */
+    public function setSupplierInfo($supplierInfo)
+    {
+        $this->supplierInfo = $supplierInfo;
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getSupplierInfo(): SupplierInfo
+    {
+        return $this->supplierInfo;
+    }
+    /**
+     * @param $cashier
+     *
+     * @return $this
+     */
+    public function setCashier($cashier) : Document
+    {
+        $this->cashier = $cashier;
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getCashier()
+    {
+        return $this->cashier;
+    }
+
+    /**
+     * @param $cashier
+     *
+     * @return $this
+     */
+    public function setAdditionalCheckProps($additionalCheckProps) : Document
+    {
+        $this->additionalCheckProps = $additionalCheckProps;
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getAdditionalCheckProps()
+    {
+        return $this->additionalCheckProps;
+    }
+
+    /**
+     * @param $customerInfo
+     *
+     * @return $this
+     */
+    public function setCustomerInfo ($customerInfo) : Document
+    {
+        $this->customerInfo = $customerInfo;
+        return $this;
+    }
+
+    /**
+     * @return \Rarus\Online\Kkt\Queue\DTO\тег
+     */
+    public function getCustomerInfo ()
+    {
+        return $this->customerInfo;
+    }
+
+    /**
+     * @param $customerInn
+     *
+     * @return \Rarus\Online\Kkt\Queue\DTO\Document
+     */
+    public function setCustomerInn ($customerInn) : Document
+    {
+        $this->customerInn = $customerInn;
+        return $this;
+    }
+
+    /**
+     * @return \Rarus\Online\Kkt\Queue\DTO\тег
+     */
+    public function getCustomerInn ()
+    {
+        return $this->customerInn;
+    }
+
+    /**
+     * @param $nameAdditionalUserDetails
+     *
+     * @return \Rarus\Online\Kkt\Queue\DTO\Document
+     */
+    public function setNameAdditionalUserDetails ($nameAdditionalUserDetails) : Document
+    {
+        $this->nameAdditionalUserDetails = $nameAdditionalUserDetails;
+        return $this;
+    }
+
+    /**
+     * @return \Rarus\Online\Kkt\Queue\DTO\тег
+     */
+    public function getNameAdditionalUserDetails ()
+    {
+        return $this->nameAdditionalUserDetails;
+    }
+
+    /**
+     * @param $valueAdditionalUserDetails
+     *
+     * @return \Rarus\Online\Kkt\Queue\DTO\Document
+     */
+    public function setValueAdditionalUserDetails ($valueAdditionalUserDetails) : Document
+    {
+        $this->valueAdditionalUserDetails = $valueAdditionalUserDetails;
+        return $this;
+    }
+
+    /**
+     * @return \Rarus\Online\Kkt\Queue\DTO\тег
+     */
+    public function getValueAdditionalUserDetails ()
+    {
+        return $this->valueAdditionalUserDetails;
+    }
+
+    /**
+     * @return float
+     */
+    public function getCredit() : float
+    {
+        return $this->credit;
+    }
+
+    /**
+     * @param Money $credit
+     *
+     * @return Document
+     */
+    protected function setCredit(Money $credit): Document
+    {
+        $moneyFormatter = new DecimalMoneyFormatter(new ISOCurrencies());
+        //todo Перенести format в toArray. Использовать Money. Преонбазовать в строку только перед отправкой на сервис
+        $this->credit = (float)$moneyFormatter->format($credit);
+        return $this;
+    }
+
+    /**
+     * @return float
+     */
+    public function getAdvancePayment() : float
+    {
+        return $this->advancePayment;
+    }
+
+    /**
+     * @param Money $advancePayment
+     *
+     * @return Document
+     */
+    protected function setAdvancePayment(Money $advancePayment): Document
+    {
+        $moneyFormatter = new DecimalMoneyFormatter(new ISOCurrencies());
+        //todo Перенести format в toArray. Использовать Money. Преонбазовать в строку только перед отправкой на сервис
+        $this->advancePayment = (float)$moneyFormatter->format($advancePayment);
+        return $this;
+    }
+
+    /**
+     * @return float
+     */
+    public function getCash() : float
+    {
+        return $this->cash;
+    }
+
+    /**
+     * @param Money $cash
+     *
+     * @return Document
+     */
+    protected function setCash(Money $cash): Document
+    {
+        $moneyFormatter = new DecimalMoneyFormatter(new ISOCurrencies());
+        //todo Перенести format в toArray. Использовать Money. Преонбазовать в строку только перед отправкой на сервис
+        $this->cash = (float)$moneyFormatter->format($cash);
+        return $this;
+    }
+
+    /**
+     * @return float
+     */
+    public function getBarter() : float
+    {
+        return $this->barter;
+    }
+
+    /**
+     * @param Money $barter
+     *
+     * @return Document
+     */
+    protected function setBarter(Money $barter): Document
+    {
+        $moneyFormatter = new DecimalMoneyFormatter(new ISOCurrencies());
+        //todo Перенести format в toArray. Использовать Money. Преонбазовать в строку только перед отправкой на сервис
+        $this->barter = (float)$moneyFormatter->format($barter);
         return $this;
     }
 }
