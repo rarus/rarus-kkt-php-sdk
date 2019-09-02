@@ -25,7 +25,9 @@
     "fig/http-message-util":"*",
     "monolog/monolog": "1.*",
     "guzzlehttp/guzzle": "6.x",
-    "moneyphp/money": "^3.0"
+    "moneyphp/money": "^3.0",
+    "giggsey/libphonenumber-for-php": "^8.10",
+    "eloquent/enumeration": "^6.0"
   },
   "require-dev": {
     "jakub-onderka/php-parallel-lint": "0.9",

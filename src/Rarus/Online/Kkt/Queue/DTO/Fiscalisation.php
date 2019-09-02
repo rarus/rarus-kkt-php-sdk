@@ -28,6 +28,10 @@ class Fiscalisation extends AbstractFiscalisation
      * @param int          $fiscalAttribute
      * @param int          $fiscalDocNumber
      * @param string       $fnsSite
+     * @param \Money\Money $credit
+     * @param \Money\Money $advancePayment
+     * @param \Money\Money $cash
+     * @param \Money\Money $barter
      */
     public function __construct(
         Money $total,
@@ -39,7 +43,11 @@ class Fiscalisation extends AbstractFiscalisation
         string $kktRegistrationNumber,
         int $fiscalAttribute,
         int $fiscalDocNumber,
-        string $fnsSite
+        string $fnsSite,
+        string $credit,
+        string $advancePayment,
+        string $cash,
+        string $barter
     ) {
         $this->setTotal($total);
         $this->setFiscalNumber($fiscalNumber);
@@ -50,6 +58,10 @@ class Fiscalisation extends AbstractFiscalisation
         $this->setFiscalAttribute($fiscalAttribute);
         $this->setFiscalDocNumber($fiscalDocNumber);
         $this->setFnsSite($fnsSite);
+        $this->setCredit($credit);
+        $this->setAdvancePayment($advancePayment);
+        $this->setCash($cash);
+        $this->setBarter($barter);
     }
 
     /**
@@ -66,7 +78,11 @@ class Fiscalisation extends AbstractFiscalisation
             'kkt_registration_number' => $this->getKktRegistrationNumber(),
             'fiscal_attribute'        => $this->getFiscalAttribute(),
             'fiscal_doc_number'       => $this->getFiscalDocNumber(),
-            'fns_site'                => $this->getFnsSite()
+            'fns_site'                => $this->getFnsSite(),
+            'credit'                  => $this->getCredit(),
+            'advance_payment'         => $this->getAdvancePayment(),
+            'cash'                    => $this->getCash(),
+            'barter'                  => $this->getBarter()
         ];
     }
 }

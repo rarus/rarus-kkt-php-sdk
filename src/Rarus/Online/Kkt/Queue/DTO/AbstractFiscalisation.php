@@ -51,7 +51,22 @@ abstract class AbstractFiscalisation
      * @var string адрес сайта fns
      */
     protected $fnsSite;
-
+    /**
+     * @var string Кредит
+     */
+    protected $credit;
+    /**
+     * @var string Аванс
+     */
+    protected $advancePayment;
+    /**
+     * @var string Сумма наличными
+     */
+    protected $cash;
+    /**
+     * @var string Сумма встречного представления
+     */
+    protected $barter;
     /**
      * @return \Money\Money
      */
@@ -220,6 +235,82 @@ abstract class AbstractFiscalisation
     protected function setFnsSite(string $fnsSite): AbstractFiscalisation
     {
         $this->fnsSite = $fnsSite;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCredit() :string
+    {
+        return $this->credit;
+    }
+
+    /**
+     * @param string $credit
+     *
+     * @return \Rarus\Online\Kkt\Queue\DTO\AbstractFiscalisation
+     */
+    protected function setCredit(string $credit): AbstractFiscalisation
+    {
+        $this->credit = $credit;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getAdvancePayment() :string
+    {
+        return $this->advancePayment;
+    }
+
+    /**
+     * @param string $advancePayment
+     *
+     * @return \Rarus\Online\Kkt\Queue\DTO\AbstractFiscalisation
+     */
+    protected function setAdvancePayment(string $advancePayment): AbstractFiscalisation
+    {
+        $this->advancePayment = $advancePayment;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCash() :string
+    {
+        return $this->cash;
+    }
+
+    /**
+     * @param string $cash
+     *
+     * @return \Rarus\Online\Kkt\Queue\DTO\AbstractFiscalisation
+     */
+    protected function setCash(string $cash): AbstractFiscalisation
+    {
+        $this->cash = $cash;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getBarter() :string
+    {
+        return $this->barter;
+    }
+
+    /**
+     * @param string $barter
+     *
+     * @return \Rarus\Online\Kkt\Queue\DTO\AbstractFiscalisation
+     */
+    protected function setBarter(string $barter): AbstractFiscalisation
+    {
+        $this->barter = $barter;
         return $this;
     }
 }
