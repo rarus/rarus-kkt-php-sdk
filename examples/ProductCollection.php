@@ -219,7 +219,7 @@ foreach ((array)$products as $product) {
     $productDto = new Product(
         (string)$product['name'],
         $money,
-        (int)$product['quantity'],
+        (float)$product['quantity'],
         $priceSum,
         (string)$product['tax'],
         $taxSum,
