@@ -25,7 +25,7 @@ class Product
      */
     protected $price;
     /**
-     * @var int количество приобретенного товара
+     * @var float количество приобретенного товара
      */
     protected $quantity;
     /**
@@ -86,7 +86,7 @@ class Product
      *
      * @param string                                   $name
      * @param \Money\Money                             $price
-     * @param int                                      $quantity
+     * @param float                                    $quantity
      * @param \Money\Money                             $sum
      * @param string                                   $tax
      * @param \Money\Money                             $taxSum
@@ -104,7 +104,7 @@ class Product
     public function __construct(
         string $name,
         Money $price,
-        int $quantity,
+        float $quantity,
         Money $sum,
         string $tax,
         Money $taxSum,
@@ -201,9 +201,9 @@ class Product
     }
 
     /**
-     * @return int
+     * @return float
      */
-    public function getQuantity(): int
+    public function getQuantity(): float
     {
         return $this->quantity;
     }
@@ -213,7 +213,7 @@ class Product
      *
      * @return Product
      */
-    protected function setQuantity(int $quantity): Product
+    protected function setQuantity(float $quantity): Product
     {
         $this->quantity = $quantity;
         return $this;

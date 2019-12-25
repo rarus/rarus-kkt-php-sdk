@@ -136,7 +136,7 @@ $supplierInfoDtoItem = new SupplierInfo(
 $productDto = new Product(
     (string)$product['name'],
     $price,
-    (int)$product['quantity'],
+    (float)$product['quantity'],
     $priceSum,
     (string)$product['tax'],
     $taxSum,
