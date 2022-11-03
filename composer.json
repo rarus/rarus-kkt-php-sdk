@@ -24,7 +24,7 @@
     "psr/log": "^1.0",
     "fig/http-message-util":"*",
     "monolog/monolog": "1.*",
-    "guzzlehttp/guzzle": "6.x",
+    "guzzlehttp/guzzle": "^6.0||^7.0",
     "moneyphp/money": "^3.0",
     "giggsey/libphonenumber-for-php": "^8.10",
     "eloquent/enumeration": "^6.0"
