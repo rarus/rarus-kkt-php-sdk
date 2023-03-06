@@ -515,10 +515,7 @@ class Document
         return $this;
     }
 
-    /**
-     * @return \Rarus\Online\Kkt\Queue\DTO\тег
-     */
-    public function getCustomerInfo ()
+    public function getCustomerInfo()
     {
         return $this->customerInfo;
     }
@@ -534,10 +531,7 @@ class Document
         return $this;
     }
 
-    /**
-     * @return \Rarus\Online\Kkt\Queue\DTO\тег
-     */
-    public function getCustomerInn ()
+    public function getCustomerInn()
     {
         return $this->customerInn;
     }
@@ -553,10 +547,7 @@ class Document
         return $this;
     }
 
-    /**
-     * @return \Rarus\Online\Kkt\Queue\DTO\тег
-     */
-    public function getNameAdditionalUserDetails ()
+    public function getNameAdditionalUserDetails()
     {
         return $this->nameAdditionalUserDetails;
     }
@@ -572,10 +563,7 @@ class Document
         return $this;
     }
 
-    /**
-     * @return \Rarus\Online\Kkt\Queue\DTO\тег
-     */
-    public function getValueAdditionalUserDetails ()
+    public function getValueAdditionalUserDetails()
     {
         return $this->valueAdditionalUserDetails;
     }
