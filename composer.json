@@ -12,28 +12,27 @@
   "license": "MIT",
   "authors": [
     {
-      "name": "Grishin Mikhail",
-      "email": "grishi@rarus.ru",
+      "name": "Подопригора Евгений",
+      "email": "podoev@rarus.ru",
       "homepage": "https://rarus.ru"
     }
   ],
   "require": {
-    "php": ">=7.0",
+    "php": ">=7.4",
     "ext-json": "*",
     "ext-curl": "*",
     "psr/log": "^1.0",
     "fig/http-message-util":"*",
     "monolog/monolog": "1.*",
-    "guzzlehttp/guzzle": "6.x",
+    "guzzlehttp/guzzle": "^7.0",
     "moneyphp/money": "^3.0",
     "giggsey/libphonenumber-for-php": "^8.10",
     "eloquent/enumeration": "^6.0"
   },
   "require-dev": {
-    "jakub-onderka/php-parallel-lint": "0.9",
-    "jakub-onderka/php-console-highlighter": "~0.3",
-    "phpunit/phpunit": "6.*"
-
+    "php-parallel-lint/php-console-color": "^1.0",
+    "php-parallel-lint/php-console-highlighter": "^1.0",
+    "phpunit/phpunit": "^8.0"
   },
   "autoload": {
     "psr-4": {

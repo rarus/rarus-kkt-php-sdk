@@ -50,7 +50,6 @@ class Transport extends AbstractTransport
         parent::__construct($apiClient, $version, $log);
     }
 
-
     /**
      * Метод получает список z-отчетов за период,
      * которые были сформированы фермой ККТ с указанным идентификатором api_key
@@ -104,6 +103,8 @@ class Transport extends AbstractTransport
 
     private function makeRequest(string $apiMethod, string $method, array $args = []): array
     {
+        $this->log->debug('rarus.online.kkt.Queue.Transport.' . __FUNCTION__, ['$args' => $args]);
+
         return $this->apiClient->executeApiRequest(
             $this->version->getBaseUrl() . '/' . $apiMethod,
             $method,
@@ -122,7 +123,7 @@ class Transport extends AbstractTransport
      */
     public function addDocument(Document $document): OperationState
     {
-        $this->log->info('rarus.online.kkt.Queue.Transport.' . __FUNCTION__ . '.start');
+        $this->log->debug('rarus.online.kkt.Queue.Transport.' . __FUNCTION__ . '.start');
 
         $moneyFormatter = new DecimalMoneyFormatter(new ISOCurrencies());
 
@@ -147,6 +148,8 @@ class Transport extends AbstractTransport
         // TODO на данный момент есть баг с преобразованием float в json_encode,
         // TODO хотя пишут что Status: Closed https://bugs.php.net/bug.php?id=72567
         \ini_set('serialize_precision', '-1');
+
+        $this->log->info('rarus.online.kkt.Queue.Transport.' . __FUNCTION__ . '.', ['$documentArray' => $documentArray]);
 
         $body = \json_encode($documentArray, \JSON_UNESCAPED_SLASHES | \JSON_UNESCAPED_UNICODE);
 

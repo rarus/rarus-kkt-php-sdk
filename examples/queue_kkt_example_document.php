@@ -155,7 +155,10 @@ $documentArray = [
             'stamp_type' => '3111',
             'GTIN' => '12121213232',
             'serial_number' => '37777',
-            'customs_declaration' => '8888888'
+            'customs_declaration' => '8888888',
+            'marking_code' => '0108019227246674215:md7Ehwwhpdy<0x1D>91ee08<0x1D>92ybeylJbht8LhsXDca+U4akz+ugzpvidwTipcVuZwZ0e=', //код маркировки
+            'planned_status' => 1, //планируемый статус товара
+            'measure_quantity' => 11 //мера количества предмета расчета
         ]
     ],
     'total'                  => '60.89',
@@ -316,7 +319,10 @@ foreach ((array)$documentArray['items'] as $product) {
         (string)$product['serial_number'],
         (string)$product['customs_declaration'],
         $agentInfoDto,
-        $supplierInfoDtoItem
+        $supplierInfoDtoItem,
+        (string)$product['marking_code'],
+        (int)$product['planned_status'],
+        (int)$product['measure_quantity']
     );
 
     $productCollection->attach($productDto, $product);

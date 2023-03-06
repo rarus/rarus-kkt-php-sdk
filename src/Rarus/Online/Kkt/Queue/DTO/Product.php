@@ -19,87 +19,119 @@ class Product
     /**
      * @var string наименование товара
      */
-    protected $name;
+    protected string $name;
     /**
      * @var Money цена за единицу товара
      */
-    protected $price;
+    protected Money $price;
     /**
      * @var float количество приобретенного товара
      */
-    protected $quantity;
+    protected float $quantity;
     /**
      * @var Money сумма товара
      */
-    protected $sum;
+    protected Money $sum;
     /**
      * @var string ставки НДС
      */
-    protected $tax;
+    protected string $tax;
     /**
      * @var Money цена за единицу товара
      */
-    protected $taxSum;
-
+    protected Money $taxSum;
     /**
      * @var string Признак способа расчета
      */
-    protected $signMethodCalculation;
+    protected string $signMethodCalculation;
     /**
      * @var string Признак предмета расчета
      */
-    protected $signCalculationObject;
+    protected string $signCalculationObject;
     /**
      * @var string тег 1191 Пользовательские данные
      */
-    protected $userData;
+    protected string $userData;
     /**
      * @var string тег 1197 Единица измерения
      */
-    protected $measurementUnit;
+    protected string $measurementUnit;
     /**
      * @var string Тип маркировки
      */
-    protected $stampType;
+    protected string $stampType;
     /**
      * @var string Глобальный идентификатор торговой единицы
      */
-    protected $globalTradeUnitIdentifier;
+    protected string $gtin;
     /**
      * @var string Серийный номер
      */
-    protected $serialNumber;
+    protected string $serialNumber;
     /**
      * @var string тег 1231 Номер таможенной декларации
      */
-    protected $customsDeclarationNumber;
+    protected string $customsDeclarationNumber;
     /**
-     * @var \Rarus\Online\Kkt\Queue\DTO\AgentInfo
+     * @var AgentInfo
      */
-    protected $agentInfo;
+    protected AgentInfo $agentInfo;
     /**
-     * @var \Rarus\Online\Kkt\Queue\DTO\SupplierInfo
+     * @var SupplierInfo
      */
-    protected $supplierInfo;
-     /**
+    protected SupplierInfo $supplierInfo;
+
+    /**
+     * @var string|null
+     * marking_code - string, код маркировки. Передаётся в явном формате с разделителями <0x1D>
+     */
+    protected ?string $markingCode;
+
+    /**
+     * @var int|null
+     * planned_status - integer, планируемый статус товара. Значения:
+     *      1 - Штучный товар, подлежащий обязательной маркировке средством идентификации, реализован
+     *      2 - Мерный товар, подлежащий обязательной маркировке средством идентификации, в стадии реализации
+     *      3 - Штучный товар, подлежащий обязательной маркировке средством идентификации, возвращен
+     *      4 - Часть товара, подлежащего обязательной маркировке средством идентификации, возвращена
+     */
+    protected ?int $plannedStatus;
+
+    /**
+     * @var int|null
+     * measure_quantity - integer, мера количества предмета расчета.
+     * Значения: http://www.consultant.ru/document/cons_doc_LAW_362322/0060b1f1924347c03afbc57a8d4af63888f81c6c/
+     * Примеры значений:
+     * Килограмм = 11
+     * Тонна = 12
+     * Квадратный метр = 32
+     * Сутки (день) = 70
+     * Мегабайт = 81
+     */
+    protected ?int $measureQuantity;
+
+    /**
      * Product constructor.
      *
-     * @param string                                   $name
-     * @param \Money\Money                             $price
-     * @param float                                    $quantity
-     * @param \Money\Money                             $sum
-     * @param string                                   $tax
-     * @param \Money\Money                             $taxSum
-     * @param string                                   $signMethodCalculation
-     * @param string                                   $signCalculationObject
-     * @param string                                   $userData
-     * @param string                                   $measurementUnit
-     * @param string                                   $stampType
-     * @param string                                   $globalTradeUnitIdentifier
-     * @param string                                   $serialNumber
-     * @param string                                   $customsDeclarationNumber
-     * @param \Rarus\Online\Kkt\Queue\DTO\AgentInfo    $agentInfo
-     * @param \Rarus\Online\Kkt\Queue\DTO\SupplierInfo $supplierInfo
+     * @param string $name
+     * @param Money $price
+     * @param float $quantity
+     * @param Money $sum
+     * @param string $tax
+     * @param Money $taxSum
+     * @param string|null $signMethodCalculation
+     * @param string|null $signCalculationObject
+     * @param string|null $userData
+     * @param string|null $measurementUnit
+     * @param string|null $stampType
+     * @param string|null $gtin
+     * @param string|null $serialNumber
+     * @param string|null $customsDeclarationNumber
+     * @param AgentInfo $agentInfo
+     * @param SupplierInfo $supplierInfo
+     * @param string|null $markingCode
+     * @param int|null $plannedStatus
+     * @param int|null $measureQuantity
      */
     public function __construct(
         string $name,
@@ -108,16 +140,19 @@ class Product
         Money $sum,
         string $tax,
         Money $taxSum,
-        ?string $signMethodCalculation = '',
-        ?string $signCalculationObject = '',
-        ?string $userData = '',
-        ?string $measurementUnit = '',
-        ?string $stampType = '',
-        ?string $globalTradeUnitIdentifier = '',
-        ?string $serialNumber = '',
-        ?string $customsDeclarationNumber  = '',
+        ?string $signMethodCalculation,
+        ?string $signCalculationObject,
+        ?string $userData,
+        ?string $measurementUnit,
+        ?string $stampType,
+        ?string $gtin,
+        ?string $serialNumber,
+        ?string $customsDeclarationNumber,
         AgentInfo $agentInfo,
-        SupplierInfo $supplierInfo
+        SupplierInfo $supplierInfo,
+        ?string $markingCode = null,
+        ?int $plannedStatus = null,
+        ?int $measureQuantity = null
     ) {
         $this->setName($name);
         $this->setPrice($price);
@@ -130,11 +165,14 @@ class Product
         $this->setUserData($userData);
         $this->setMeasurementUnit($measurementUnit);
         $this->setStampType($stampType);
-        $this->setGlobalTradeUnitIdentifier($globalTradeUnitIdentifier);
+        $this->setGtin($gtin);
         $this->setSerialNumber($serialNumber);
         $this->setCustomsDeclarationNumber($customsDeclarationNumber);
         $this->setAgentInfo($agentInfo);
         $this->setSupplierInfo($supplierInfo);
+        $this->setMarkingCode($markingCode);
+        $this->setPlannedStatus($plannedStatus);
+        $this->setMeasureQuantity($measureQuantity);
     }
 
     /**
@@ -142,7 +180,7 @@ class Product
      */
     public function toArray(): array
     {
-        return [
+        $arResult = [
             'name'     => $this->getName(),
             'price'    => $this->getPrice(),
             'quantity' => $this->getQuantity(),
@@ -154,12 +192,19 @@ class Product
             'user_data' => $this->getUserData(),
             'measurement_unit' => $this->getMeasurementUnit(),
             'stamp_type' => $this->getStampType(),
-            'GTIN' => $this->getGlobalTradeUnitIdentifier(),
+            'GTIN' => $this->getGtin(),
             'serial_number' => $this->getSerialNumber(),
             'customs_declaration' => $this->getCustomsDeclarationNumber(),
             'agent_info' => $this->getAgentInfo()->toArray(),
-            'supplier_info' => $this->getSupplierInfo()->toArray()
+            'supplier_info' => $this->getSupplierInfo()->toArray(),
+            'marking_code' => $this->getMarkingCode(),
+            'planned_status' => $this->getPlannedStatus(),
+            'measure_quantity' => $this->getMeasureQuantity()
         ];
+
+        // удаляем из массива пустые значения тегов,
+        // т.к. ферма не принимает null-значений и конвертирует их в '', 0, и пр. по своей внут.логике
+        return array_filter($arResult);
     }
 
     /**
@@ -190,7 +235,7 @@ class Product
     }
 
     /**
-     * @param \Money\Money $price
+     * @param Money $price
      *
      * @return \Rarus\Online\Kkt\Queue\DTO\Product
      */
@@ -209,7 +254,7 @@ class Product
     }
 
     /**
-     * @param int $quantity
+     * @param float $quantity
      *
      * @return Product
      */
@@ -228,7 +273,7 @@ class Product
     }
 
     /**
-     * @param \Money\Money $sum
+     * @param Money $sum
      *
      * @return Product
      */
@@ -266,7 +311,7 @@ class Product
     }
 
     /**
-     * @param \Money\Money $taxSum
+     * @param Money $taxSum
      *
      * @return Product
      */
@@ -285,7 +330,7 @@ class Product
     }
 
     /**
-     * @param string $signMethodCalculation
+     * @param string|null $signMethodCalculation
      *
      * @return Product
      */
@@ -307,9 +352,9 @@ class Product
     }
 
     /**
-     * @param string $signCalculationObject
+     * @param string|null $signCalculationObject
      *
-     * @return \Rarus\Online\Kkt\Queue\DTO\Product
+     * @return Product
      */
     protected function setSignCalculationObject(?string $signCalculationObject): Product
     {
@@ -328,9 +373,9 @@ class Product
     }
 
     /**
-     * @param string $userData
+     * @param string|null $userData
      *
-     * @return \Rarus\Online\Kkt\Queue\DTO\Product
+     * @return Product
      */
     protected function setUserData(?string $userData): Product
     {
@@ -350,13 +395,13 @@ class Product
     }
 
     /**
-     * @param string $measurementUnit
+     * @param string|null $measurementUnit
      *
-     * @return \Rarus\Online\Kkt\Queue\DTO\Product
+     * @return Product
      */
     protected function setMeasurementUnit(?string $measurementUnit): Product
     {
-        if($measurementUnit === null){
+        if ($measurementUnit === null) {
             $measurementUnit = '';
         }
         $this->measurementUnit = $measurementUnit;
@@ -372,13 +417,13 @@ class Product
     }
 
     /**
-     * @param string $stampType
+     * @param string|null $stampType
      *
-     * @return \Rarus\Online\Kkt\Queue\DTO\Product
+     * @return Product
      */
     protected function setStampType(?string $stampType): Product
     {
-        if($stampType === null){
+        if ($stampType === null) {
             $stampType = '';
         }
         $this->stampType = $stampType;
@@ -388,22 +433,22 @@ class Product
     /**
      * @return string
      */
-    public function getGlobalTradeUnitIdentifier(): string
+    public function getGtin(): string
     {
-        return $this->globalTradeUnitIdentifier;
+        return $this->gtin;
     }
 
     /**
-     * @param string $globalTradeUnitIdentifier
+     * @param string|null $gtin
      *
-     * @return \Rarus\Online\Kkt\Queue\DTO\Product
+     * @return Product
      */
-    protected function setGlobalTradeUnitIdentifier(?string $globalTradeUnitIdentifier): Product
+    protected function setGtin(?string $gtin): Product
     {
-        if($globalTradeUnitIdentifier === null){
-            $globalTradeUnitIdentifier = '';
+        if($gtin === null){
+            $gtin = '';
         }
-        $this->globalTradeUnitIdentifier = $globalTradeUnitIdentifier;
+        $this->gtin = $gtin;
         return $this;
     }
 
@@ -416,13 +461,13 @@ class Product
     }
 
     /**
-     * @param string $serialNumber
+     * @param string|null $serialNumber
      *
-     * @return \Rarus\Online\Kkt\Queue\DTO\Product
+     * @return Product
      */
     protected function setSerialNumber(?string $serialNumber): Product
     {
-        if($serialNumber === null){
+        if ($serialNumber === null) {
             $serialNumber = '';
         }
         $this->serialNumber = $serialNumber;
@@ -438,9 +483,8 @@ class Product
     }
 
     /**
-     * @param string $stampType
-     *
-     * @return \Rarus\Online\Kkt\Queue\DTO\Product
+     * @param string|null $customsDeclarationNumber
+     * @return Product
      */
     protected function setCustomsDeclarationNumber(?string $customsDeclarationNumber): Product
     {
@@ -454,9 +498,9 @@ class Product
     /**
      * @param mixed $agentInfo
      *
-     * @return
+     * @return Product
      */
-    public function setAgentInfo(AgentInfo $agentInfo)
+    public function setAgentInfo(AgentInfo $agentInfo): Product
     {
         $this->agentInfo = $agentInfo;
         return $this;
@@ -471,11 +515,11 @@ class Product
     }
 
     /**
-     * @param $supplierInfo
+     * @param SupplierInfo $supplierInfo
      *
-     * @return $this
+     * @return Product
      */
-    public function setSupplierInfo(SupplierInfo $supplierInfo)
+    public function setSupplierInfo(SupplierInfo $supplierInfo): Product
     {
         $this->supplierInfo = $supplierInfo;
         return $this;
@@ -489,4 +533,58 @@ class Product
         return $this->supplierInfo;
     }
 
+    /**
+     * @return string|null
+     */
+    public function getMarkingCode(): ?string
+    {
+        return $this->markingCode;
+    }
+
+    /**
+     * @param string|null $markingCode
+     * @return $this
+     */
+    protected function setMarkingCode(?string $markingCode): Product
+    {
+
+        $this->markingCode = $markingCode;
+        return $this;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getPlannedStatus(): ?int
+    {
+        return $this->plannedStatus;
+    }
+
+    /**
+     * @param int|null $plannedStatus
+     * @return $this
+     */
+    protected function setPlannedStatus(?int $plannedStatus): Product
+    {
+        $this->plannedStatus = $plannedStatus;
+        return $this;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getMeasureQuantity(): ?int
+    {
+        return $this->measureQuantity;
+    }
+
+    /**
+     * @param int|null $measureQuantity
+     * @return $this
+     */
+    protected function setMeasureQuantity(?int $measureQuantity): Product
+    {
+        $this->measureQuantity = $measureQuantity;
+        return $this;
+    }
 }

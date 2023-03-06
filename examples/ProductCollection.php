@@ -138,7 +138,10 @@ $products = [
         'stamp_type' => '3111',
         'GTIN' => '12121213232',
         'serial_number' => '37777',
-        'customs_declaration' => '8888888'
+        'customs_declaration' => '8888888',
+        'marking_code' => '0108019227246674215:md7Ehwwhpdy<0x1D>91ee08<0x1D>92ybeylJbht8LhsXDca+U4akz+ugzpvidwTipcVuZwZ0e=', //код маркировки
+        'planned_status' => 1, //планируемый статус товара
+        'measure_quantity' => 11 //мера количества предмета расчета
     ]
 ];
 
@@ -232,7 +235,10 @@ foreach ((array)$products as $product) {
         (string)$product['serial_number'],
         (string)$product['customs_declaration'],
         $agentInfoDto,
-        $supplierInfoDtoItem
+        $supplierInfoDtoItem,
+        (string)$product['marking_code'],
+        (int)$product['planned_status'],
+        (int)$product['measure_quantity']
     );
 
     $productCollection->attach($productDto, $product);
@@ -253,11 +259,14 @@ foreach ((array)$products as $product) {
     print(sprintf(' -user_data: %s' . PHP_EOL, $productDto->getUserData()));
     print(sprintf(' -measurement_unit: %s' . PHP_EOL, $productDto->getMeasurementUnit()));
     print(sprintf(' -stamp_type: %s' . PHP_EOL, $productDto->getStampType()));
-    print(sprintf(' -GTIN: %s' . PHP_EOL, $productDto->getGlobalTradeUnitIdentifier()));
+    print(sprintf(' -GTIN: %s' . PHP_EOL, $productDto->getGtin()));
     print(sprintf(' -serial_number: %s' . PHP_EOL, $productDto->getSerialNumber()));
     print(sprintf(' -customs_declaration: %s' . PHP_EOL, $productDto->getCustomsDeclarationNumber()));
     print('-agent_info:' . PHP_EOL . Var_export( $productDto->getAgentInfo()->toArray()));
     print('-supplier_info:' . PHP_EOL . Var_export( $productDto->getSupplierInfo()->toArray()));
+    print(sprintf(' -marking_code: %s' . PHP_EOL, $productDto->getMarkingCode()));
+    print(sprintf(' -planned_status: %s' . PHP_EOL, $productDto->getPlannedStatus()));
+    print(sprintf(' -measure_quantity: %s' . PHP_EOL, $productDto->getMeasureQuantity()));
 }
 
 $log->info('rarus.online.kkt.service.ProductCollection.finish');
