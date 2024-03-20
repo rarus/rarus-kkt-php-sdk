@@ -149,7 +149,7 @@ class Transport extends AbstractTransport
         // TODO хотя пишут что Status: Closed https://bugs.php.net/bug.php?id=72567
         \ini_set('serialize_precision', '-1');
 
-        $this->log->info('rarus.online.kkt.Queue.Transport.' . __FUNCTION__ . '.', ['$documentArray' => $documentArray]);
+        $this->log->info('rarus.online.kkt.Queue.Transport.' . __FUNCTION__ . '.documentArray', ['$documentArray' => $documentArray]);
 
         $body = \json_encode($documentArray, \JSON_UNESCAPED_SLASHES | \JSON_UNESCAPED_UNICODE);
 
@@ -157,7 +157,7 @@ class Transport extends AbstractTransport
         \ini_set('serialize_precision', $serializePrecision);
 
 
-        $this->log->info('rarus.online.kkt.Queue.Transport.' . __FUNCTION__ . '.', ['body' => $body]);
+        $this->log->info('rarus.online.kkt.Queue.Transport.' . __FUNCTION__ . '.body', ['body' => $body]);
 
 
         $documentResult = $this->makeRequest(
