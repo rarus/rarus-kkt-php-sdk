@@ -5,6 +5,8 @@ namespace Rarus\Online\Kkt\Taxes;
 
 use Rarus\Online\Kkt\Exception\InvalidTaxCodeException;
 
+use function sprintf;
+
 /**
  * Class TaxesFabric
  *
@@ -40,7 +42,7 @@ class TaxesFabric
                 $taxSystem = new USNDR();
                 break;
             default:
-                throw new InvalidTaxCodeException(\sprintf('incorrect tax code [%s]', $taxCode));
+                throw new InvalidTaxCodeException(sprintf('incorrect tax code [%s]', $taxCode));
         }
 
         return $taxSystem;

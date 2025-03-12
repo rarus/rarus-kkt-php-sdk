@@ -7,11 +7,13 @@
  */
 require_once __DIR__ . '/init.php';
 
-use \Rarus\Online\Kkt\Service\Transport as ServiceTransport;
+use Rarus\Online\Kkt\Service\Transport as ServiceTransport;
+
+global $log;
+global $apiClient;
 
 $serviceTransport = new ServiceTransport($apiClient, $log);
 $serviceTransportDto = $serviceTransport->ping();
-
 
 $log->info('rarus.online.kkt.service.getPing', [
     'pingDto'=> $serviceTransportDto->toArray()

@@ -1,27 +1,21 @@
 <?php
+
 declare(strict_types=1);
-require_once '..' . '/vendor/autoload.php';
+require_once __DIR__ . '/../vendor/autoload.php';
 
-use \Monolog\Logger;
-
-
-use \GuzzleHttp\{
-    HandlerStack,
-    Middleware,
-    MessageFormatter
-};
-
-use \Rarus\Online\Kkt\ApiClient;
-use \Monolog\Handler\SocketHandler;
+use GuzzleHttp\{Client, HandlerStack, Middleware, MessageFormatter};
 use Monolog\Formatter\LogstashFormatter;
+use Monolog\Handler\SocketHandler;
+use Monolog\Handler\StreamHandler;
 use Monolog\Handler\WhatFailureGroupHandler;
+use Monolog\Logger;
 use Monolog\Processor\MemoryUsageProcessor;
 use Monolog\Processor\UidProcessor;
+use Rarus\Online\Kkt\ApiClient;
 
 // инициализируем логи
 $log = new Logger('rarus-kkt-php-sdk');
-
-$log->pushHandler(new \Monolog\Handler\StreamHandler('rarus-kkt-php-sdk.log', Logger::DEBUG));
+$log->pushHandler(new StreamHandler('rarus-kkt-php-sdk.log', Logger::DEBUG));
 
 $guzzleHandlerStack = HandlerStack::create();
 $guzzleHandlerStack->push(
@@ -31,7 +25,6 @@ $guzzleHandlerStack->push(
     )
 );
 // http-клиент
-$httpClient = new \GuzzleHttp\Client();
 $log->info('=================================================================');
 $log->info('rarus.online.kkt.apiClient.start');
 
@@ -56,7 +49,7 @@ if ($argv['api_key'] === null) {
 
 
 // http-клиент
-$httpClient = new \GuzzleHttp\Client();
+$httpClient = new Client();
 $apiClient = new ApiClient($argv['url'], (string)$argv['api_key'], $httpClient, $log);
 
 $apiClient->setGuzzleHandlerStack($guzzleHandlerStack);

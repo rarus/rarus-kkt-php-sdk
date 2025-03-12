@@ -10,10 +10,13 @@ declare(strict_types=1);
 
 require_once __DIR__ . '/init.php';
 
-use \Rarus\Online\Kkt\{
+use Rarus\Online\Kkt\{
     Queue\Transport as QueueTransport,
     Service\Transport as ServiceTransport
 };
+
+global $log;
+global $apiClient;
 
 $serviceTransport = new ServiceTransport($apiClient, $log);
 $serviceTransportDto = $serviceTransport->getVersions('versions', 'get');

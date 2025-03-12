@@ -6,13 +6,15 @@ declare(strict_types=1);
 
 namespace Rarus\Online\Kkt\Service\DTO;
 
+use SplObjectStorage;
+
 /**
  * Class VersionCollection
  *
  * @package Rarus\Online\Kkt\Service\DTO
  * @method  attach(Version $object, $data = null)
  */
-class VersionCollection extends \SplObjectStorage
+class VersionCollection extends SplObjectStorage
 {
 
 }

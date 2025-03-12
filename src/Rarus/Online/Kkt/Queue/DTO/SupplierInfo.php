@@ -6,7 +6,7 @@ declare(strict_types=1);
 
 namespace Rarus\Online\Kkt\Queue\DTO;
 
-use \Rarus\Online\Kkt\Queue\DTO\Inn;
+use Rarus\Online\Kkt\Queue\DTO\Inn;
 
 /**
  * Class SupplierInfo
@@ -24,7 +24,7 @@ class SupplierInfo
      */
     protected $phone;
     /**
-     * @var string ИНН поставщика
+     * @var Inn ИНН поставщика
      */
     protected $inn;
 
@@ -33,7 +33,7 @@ class SupplierInfo
      *
      * @param string $name
      * @param string $phone
-     * @param string $inn
+     * @param Inn $inn
      */
     public function __construct(
         string $name,
@@ -76,10 +76,7 @@ class SupplierInfo
         return $this;
     }
 
-    /**
-     * @return \Rarus\Online\Kkt\Queue\DTO\Телефон
-     */
-    public function getPhone()
+    public function getPhone():string
     {
         return $this->phone;
     }
@@ -95,9 +92,6 @@ class SupplierInfo
         return $this;
     }
 
-    /**
-     * @return \Rarus\Online\Kkt\Queue\DTO\ИНН
-     */
     public function getInn() : Inn
     {
         return $this->inn;

@@ -9,12 +9,12 @@ declare(strict_types=1);
 namespace Rarus\Online\Kkt\Queue\DTO;
 
 use Money\Money;
-use \Rarus\Online\Kkt\Queue\DTO\AgentInfoPaymentAgentInfoType;
-use \Rarus\Online\Kkt\Queue\DTO\AgentInfoPaymentAgentInfoTypeValue;
-use \Rarus\Online\Kkt\Queue\DTO\AgentInfoPaymentTransferInfo;
-use \libphonenumber\PhoneNumberUtil;
-use \libphonenumber\PhoneNumberFormat;
-use \libphonenumber\PhoneNumber;
+use Rarus\Online\Kkt\Queue\DTO\AgentInfoPaymentAgentInfoType;
+use Rarus\Online\Kkt\Queue\DTO\AgentInfoPaymentAgentInfoTypeValue;
+use Rarus\Online\Kkt\Queue\DTO\AgentInfoPaymentTransferInfo;
+use libphonenumber\PhoneNumberUtil;
+use libphonenumber\PhoneNumberFormat;
+use libphonenumber\PhoneNumber;
 
 /**
  * Class AgentInfo
@@ -74,11 +74,8 @@ class AgentInfo
             'payment_transfer_info' => $this->getPaymentTransferInfo()->toArray()
         ];
     }
-
-    /**
-     * @return string
-     */
-    public function getType(): string
+    
+    public function getType(): ?AgentInfoPaymentAgentInfoTypeValue
     {
         return $this->type;
     }

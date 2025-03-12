@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Пример создания объекта ProductCollection
  * Описывает пример создания коллекции объектов DTO Product.
@@ -8,12 +10,11 @@
  *
  * Описывает пример результата отправки документа на обработку
  */
-declare(strict_types=1);
 
 require_once __DIR__ . '/init.php';
 
 use libphonenumber\PhoneNumberUtil;
-use Money\Formatter\DecimalMoneyFormatter;
+
 use Rarus\Online\Kkt\{Queue\DTO\AgentInfo,
     Queue\DTO\AgentInfoPaymentAgent,
     Queue\DTO\AgentInfoPaymentAgentInfoOperation,
@@ -24,7 +25,12 @@ use Rarus\Online\Kkt\{Queue\DTO\AgentInfo,
     Queue\DTO\ProductCollection,
     Queue\DTO\SupplierInfo};
 use Money\Currencies\ISOCurrencies;
+use Money\Currency;
+use Money\Formatter\DecimalMoneyFormatter;
 use Money\Parser\DecimalMoneyParser;
+
+global $log;
+global $apiClient;
 
 $products = [
     [
@@ -152,11 +158,13 @@ $moneyParser = new DecimalMoneyParser($currencies);
 
 $log->info('rarus.online.kkt.service.ProductCollection.start');
 
+$moneyCurrency = new Currency('RUB');
+
 foreach ((array)$products as $product) {
-    $money = $moneyParser->parse($product['price'], 'RUB');
-    $price = $moneyParser->parse($product['price'], 'RUB');
-    $taxSum = $moneyParser->parse($product['tax_sum'], 'RUB');
-    $priceSum = $moneyParser->parse($product['sum'], 'RUB');
+    $money = $moneyParser->parse($product['price'], $moneyCurrency);
+    $price = $moneyParser->parse($product['price'], $moneyCurrency);
+    $taxSum = $moneyParser->parse($product['tax_sum'], $moneyCurrency);
+    $priceSum = $moneyParser->parse($product['sum'], $moneyCurrency);
 
     if (!empty($product['agent_info']['type'])) {
         $type = strtoupper($product['agent_info']['type']);
