@@ -66,7 +66,7 @@ class AgentInfo
     public function toArray(): array
     {
         return [
-            'type' => $this->getType(),
+            'type' => $this->getType()->value(),
             'payment_agent_info' => $this->getPaymentAgentInfo()->toArray(),
             'payment_acceptor_info' => [
                 'phone' => $this->getPhoneNumber()
@@ -87,13 +87,11 @@ class AgentInfo
      */
     protected function setType(?AgentInfoPaymentAgentInfoTypeValue $type): AgentInfo
     {
-        if ($type === null) {
-            $type = '';
-        } else {
-            $AgentInfoPaymentAgentInfoType = new AgentInfoPaymentAgentInfoType();
-            $type = $AgentInfoPaymentAgentInfoType->isPaymentAgentInfoType($type);
-        }
+        // legacy
+        //$AgentInfoPaymentAgentInfoType = new AgentInfoPaymentAgentInfoType();
+        //$this->type = $AgentInfoPaymentAgentInfoType->getPaymentAgentInfoTypeString($type);
         $this->type = $type;
+        
         return $this;
     }
 
