@@ -66,7 +66,7 @@ class AgentInfo
     public function toArray(): array
     {
         return [
-            'type' => $this->getType()->value(),
+            'type' => $this->getType()? $this->getType()->value() : '',
             'payment_agent_info' => $this->getPaymentAgentInfo()->toArray(),
             'payment_acceptor_info' => [
                 'phone' => $this->getPhoneNumber()
