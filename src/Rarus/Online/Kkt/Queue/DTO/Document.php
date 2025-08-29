@@ -110,33 +110,41 @@ class Document
      * @var float Сумма встречного представления - example: 60.89
      */
     protected $barter;
+    /**
+     * @var string tag_1125 признак расчета в интернет(0..1)
+     */
+    protected string $tag1125InternetPaymentSign;
+    /**
+     * @var string tag_1011 часовая зона места расчета (1..11)
+     */
+    protected string $tag1011TimeZonePlaceOfPayment;
 
-      /**
-     * Document constructor.
-     *
-     * @param string                                        $externalId
-     * @param string                                        $docType
-     * @param \DateTime                                     $timestampUtc
-     * @param \DateTime                                     $timestampLocal
-     * @param \Rarus\Online\Kkt\Taxes\TaxInterface          $taxSystem
-     * @param \Rarus\Online\Kkt\Queue\DTO\User              $user
-     * @param string                                        $callBackUri
-     * @param string                                        $inn
-     * @param string                                        $paymentAddress
-     * @param \Money\Money                                  $total
-     * @param \Rarus\Online\Kkt\Queue\DTO\ProductCollection $items
-     * @param \Rarus\Online\Kkt\Queue\DTO\AgentInfo         $agentInfo
-     * @param \Rarus\Online\Kkt\Queue\DTO\SupplierInfo      $supplierInfo
-     * @param string                                        $cashier
-     * @param string                                        $additionalCheckProps
-     * @param string                                        $customerInfo
-     * @param string                                        $customerInn
-     * @param string                                        $nameAdditionalUserDetails
-     * @param string                                        $valueAdditionalUserDetails
-     * @param \Money\Money                                  $credit
-     * @param \Money\Money                                  $advancePayment
-     * @param \Money\Money                                  $cash
-     * @param \Money\Money                                  $barter
+    /**
+     * @param string $externalId
+     * @param string $docType
+     * @param \DateTime $timestampUtc
+     * @param \DateTime $timestampLocal
+     * @param TaxInterface $taxSystem
+     * @param User $user
+     * @param string $callBackUri
+     * @param string $inn
+     * @param string $paymentAddress
+     * @param Money $total
+     * @param ProductCollection $items
+     * @param AgentInfo $agentInfo
+     * @param SupplierInfo $supplierInfo
+     * @param string $cashier
+     * @param string $additionalCheckProps
+     * @param string $customerInfo
+     * @param string $customerInn
+     * @param string $nameAdditionalUserDetails
+     * @param string $valueAdditionalUserDetails
+     * @param Money $credit
+     * @param Money $advancePayment
+     * @param Money $cash
+     * @param Money $barter
+     * @param string $tag1125InternetPaymentSign
+     * @param string $tag1011TimeZonePlaceOfPayment
      */
     public function __construct(
         string $externalId,
@@ -161,7 +169,9 @@ class Document
         Money $credit,
         Money $advancePayment,
         Money $cash,
-        Money $barter
+        Money $barter,
+        string $tag1125InternetPaymentSign = '',
+        string $tag1011TimeZonePlaceOfPayment = '',
     ) {
         $this->setExternalId($externalId);
         $this->setDocType($docType);
@@ -186,6 +196,8 @@ class Document
         $this->setAdvancePayment($advancePayment);
         $this->setCash($cash);
         $this->setBarter($barter);
+        $this->setTag1125InternetPaymentSign($tag1125InternetPaymentSign);
+        $this->setTag1011TimeZonePlaceOfPayment($tag1011TimeZonePlaceOfPayment);
     }
 
     /**
@@ -216,7 +228,9 @@ class Document
             'credit'                 => $this->getCredit(),
             'advance_payment'        => $this->getAdvancePayment(),
             'cash'                   => $this->getCash(),
-            'barter'                 => $this->getBarter()
+            'barter'                 => $this->getBarter(),
+            'tag_1125'               => $this->getTag1125InternetPaymentSign(),
+            'tag_1011'               => $this->getTag1011TimeZonePlaceOfPayment()
         ];
     }
 
@@ -650,5 +664,25 @@ class Document
         //todo Перенести format в toArray. Использовать Money. Преонбазовать в строку только перед отправкой на сервис
         $this->barter = (float)$moneyFormatter->format($barter);
         return $this;
+    }
+
+    public function getTag1125InternetPaymentSign(): string
+    {
+        return $this->tag1125InternetPaymentSign;
+    }
+
+    public function setTag1125InternetPaymentSign(string $tag1125InternetPaymentSign): void
+    {
+        $this->tag1125InternetPaymentSign = $tag1125InternetPaymentSign;
+    }
+
+    public function getTag1011TimeZonePlaceOfPayment(): string
+    {
+        return $this->tag1011TimeZonePlaceOfPayment;
+    }
+
+    public function setTag1011TimeZonePlaceOfPayment(string $tag1011TimeZonePlaceOfPayment): void
+    {
+        $this->tag1011TimeZonePlaceOfPayment = $tag1011TimeZonePlaceOfPayment;
     }
 }
