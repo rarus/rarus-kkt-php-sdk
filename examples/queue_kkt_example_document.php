@@ -1,16 +1,17 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Пример создания объекта OperationState
  * Описывает метод document сервиса онлайн касс
  *
  * Описывает пример результата отправки документа на обработку
  */
-declare(strict_types=1);
+
 
 require_once __DIR__ . '/init.php';
 
 use libphonenumber\PhoneNumberUtil;
-use Money\Money;
 use Rarus\Online\Kkt\{Queue\DTO\AgentInfo,
     Queue\DTO\AgentInfoPaymentAgent,
     Queue\DTO\AgentInfoPaymentAgentInfoOperation,
@@ -25,10 +26,15 @@ use Rarus\Online\Kkt\{Queue\DTO\AgentInfo,
     Queue\Transport as QueueTransport,
     Service\Transport as ServiceTransport};
 use Money\Currencies\ISOCurrencies;
-use Money\Parser\DecimalMoneyParser;
-use \Rarus\Online\Kkt\Taxes\TaxesFabric;
+use Money\Currency;
 use Money\Formatter\DecimalMoneyFormatter;
-use \Rarus\Online\Kkt\Exception\InvalidTaxCodeException;
+use Money\Money;
+use Money\Parser\DecimalMoneyParser;
+use Rarus\Online\Kkt\Exception\InvalidTaxCodeException;
+use Rarus\Online\Kkt\Taxes\TaxesFabric;
+
+global $log;
+global $apiClient;
 
 $documentArray = [
     // На каждый запуск примера должен быть новый id
@@ -41,7 +47,7 @@ $documentArray = [
     'email'                  => 'customer@gmail.com',
     'phone'                  => '+79781234567',
     'tax_system'             => 'OSN',
-    'call_back_uri'          => 'http://www.roga-kopita.org/response',
+    'call_back_uri'          => 'https://www.roga-kopita.org/response',
     'inn'                    => '123456789111',
     'payment_address'        => 'www.roga-kopita.org',
     'items'                  => [
@@ -231,16 +237,17 @@ if (count($versions) === 1) {
 $currencies = new ISOCurrencies();
 $moneyParser = new DecimalMoneyParser($currencies);
 $formatter = new DecimalMoneyFormatter($currencies);
+$moneyCurrency = new Currency('RUB');
 
-$total = $moneyParser->parse($documentArray['total'], 'RUB');
+$total = $moneyParser->parse($documentArray['total'], $moneyCurrency);
 
 $productCollection = new ProductCollection();
 
 foreach ((array)$documentArray['items'] as $product) {
-    $money = $moneyParser->parse($product['price'], 'RUB');
-    $price = $moneyParser->parse($product['price'], 'RUB');
-    $taxSum = $moneyParser->parse($product['tax_sum'], 'RUB');
-    $priceSum = $moneyParser->parse($product['sum'], 'RUB');
+    $money = $moneyParser->parse($product['price'], $moneyCurrency);
+    $price = $moneyParser->parse($product['price'], $moneyCurrency);
+    $taxSum = $moneyParser->parse($product['tax_sum'], $moneyCurrency);
+    $priceSum = $moneyParser->parse($product['sum'], $moneyCurrency);
 
     if (!empty($product['agent_info']['type'])) {
         $type = strtoupper($product['agent_info']['type']);
@@ -382,10 +389,10 @@ $agentInfoDto = new AgentInfo(
     $paymentTransferInfo
 );
 
-$credit = $moneyParser->parse((string)$documentArray['credit'], 'RUB');
-$advance_payment = $moneyParser->parse((string)$documentArray['advance_payment'], 'RUB');
-$cash = $moneyParser->parse((string)$documentArray['cash'], 'RUB');
-$barter = $moneyParser->parse((string)$documentArray['barter'], 'RUB');
+$credit = $moneyParser->parse((string)$documentArray['credit'], $moneyCurrency);
+$advance_payment = $moneyParser->parse((string)$documentArray['advance_payment'], $moneyCurrency);
+$cash = $moneyParser->parse((string)$documentArray['cash'], $moneyCurrency);
+$barter = $moneyParser->parse((string)$documentArray['barter'], $moneyCurrency);
 
 $innDoc = new Inn($documentArray['supplier_info']['inn']);
 $supplierInfoDto = new SupplierInfo(

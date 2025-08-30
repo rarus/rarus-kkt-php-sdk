@@ -20,29 +20,33 @@ class AgentInfoPaymentAgentInfoType
 {
     public function isPaymentAgentInfoType(?AgentInfoPaymentAgentInfoTypeValue $type)
     {
-        if($type === null) {
-            return '';
+        $result = '';
+            
+        if ($type === null) {
+            return $result;
+        } 
+        if ($type->value() === AgentInfoPaymentAgentInfoTypeValue::PAYMENT_AGENT) {
+            $result = AgentInfoPaymentAgentInfoTypeValue::PAYMENT_AGENT;
         }
-        if($type->value() === AgentInfoPaymentAgentInfoTypeValue::PAYMENT_AGENT) {
-            return AgentInfoPaymentAgentInfoTypeValue::PAYMENT_AGENT;
+        if ($type->value() === AgentInfoPaymentAgentInfoTypeValue::PAYMENT_SUBAGENT) {
+            $result = AgentInfoPaymentAgentInfoTypeValue::PAYMENT_SUBAGENT;
         }
-        if($type->value() === AgentInfoPaymentAgentInfoTypeValue::PAYMENT_SUBAGENT) {
-            return AgentInfoPaymentAgentInfoTypeValue::PAYMENT_SUBAGENT;
+        if ($type->value() === AgentInfoPaymentAgentInfoTypeValue::BANK_AGENT) {
+            $result = AgentInfoPaymentAgentInfoTypeValue::BANK_AGENT;
         }
-        if($type->value() === AgentInfoPaymentAgentInfoTypeValue::BANK_AGENT) {
-            return AgentInfoPaymentAgentInfoTypeValue::BANK_AGENT;
+        if ($type->value() === AgentInfoPaymentAgentInfoTypeValue::BANK_SUBAGENT) {
+            $result = AgentInfoPaymentAgentInfoTypeValue::BANK_SUBAGENT;
         }
-        if($type->value() === AgentInfoPaymentAgentInfoTypeValue::BANK_SUBAGENT) {
-            return AgentInfoPaymentAgentInfoTypeValue::BANK_SUBAGENT;
+        if ($type->value() === AgentInfoPaymentAgentInfoTypeValue::ATTORNEY) {
+            $result = AgentInfoPaymentAgentInfoTypeValue::ATTORNEY;
         }
-        if($type->value() === AgentInfoPaymentAgentInfoTypeValue::ATTORNEY) {
-            return AgentInfoPaymentAgentInfoTypeValue::ATTORNEY;
+        if ($type->value() === AgentInfoPaymentAgentInfoTypeValue::COMISSION_AGENT) {
+            $result = AgentInfoPaymentAgentInfoTypeValue::COMISSION_AGENT;
         }
-        if($type->value() === AgentInfoPaymentAgentInfoTypeValue::COMISSION_AGENT) {
-            return AgentInfoPaymentAgentInfoTypeValue::COMISSION_AGENT;
+        if ($type->value() === AgentInfoPaymentAgentInfoTypeValue::OTHER) {
+            $result = AgentInfoPaymentAgentInfoTypeValue::OTHER;
         }
-        if($type->value() === AgentInfoPaymentAgentInfoTypeValue::OTHER) {
-            return AgentInfoPaymentAgentInfoTypeValue::OTHER;
-        }
+        
+        return $result;
     }
 }

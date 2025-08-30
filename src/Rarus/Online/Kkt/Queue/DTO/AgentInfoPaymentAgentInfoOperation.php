@@ -57,7 +57,7 @@ class AgentInfoPaymentAgentInfoOperation
      */
     protected function setOperation(?string $operation): AgentInfoPaymentAgentInfoOperation
     {
-        if(empty($operation) || $operation === null){
+        if (empty($operation) || $operation === null) {
             $operation = '';
         }
         if (strlen($operation) > self::MAX_LENGTH) {

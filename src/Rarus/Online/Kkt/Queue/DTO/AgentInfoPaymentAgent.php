@@ -6,9 +6,9 @@ declare(strict_types=1);
 
 namespace Rarus\Online\Kkt\Queue\DTO;
 
-use \libphonenumber\PhoneNumberUtil;
-use \libphonenumber\PhoneNumberFormat;
-use \libphonenumber\PhoneNumber;
+use libphonenumber\PhoneNumberUtil;
+use libphonenumber\PhoneNumberFormat;
+use libphonenumber\PhoneNumber;
 use Rarus\Online\Kkt\Exception\RarusKktException;
 
 /**

@@ -25,7 +25,7 @@
     "fig/http-message-util":"*",
     "monolog/monolog": "3.*",
     "guzzlehttp/guzzle": "^7.0",
-    "moneyphp/money": "^3.0",
+    "moneyphp/money": "^4.0",
     "giggsey/libphonenumber-for-php": "^8.10",
     "eloquent/enumeration": "^6.0"
   },

@@ -52,6 +52,7 @@ class Transport extends AbstractTransport
         $this->log->info('rarus.online.kkt.Service.Transport.' . __FUNCTION__ . '.start');
 
         $versionsResult = $this->makeRequest($apiMethod, $method);
+        $this->log->info('rarus.online.kkt.Service.Transport.$versionsResult',[var_export($versionsResult, true)]);
 
         $versionCollection = new VersionCollection();
 

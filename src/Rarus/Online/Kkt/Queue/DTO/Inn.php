@@ -7,11 +7,11 @@ declare(strict_types=1);
 namespace Rarus\Online\Kkt\Queue\DTO;
 
 use Money\Money;
-use \Rarus\Online\Kkt\Queue\DTO\AgentInfoPaymentAgentInfoType;
-use \Rarus\Online\Kkt\Queue\DTO\AgentInfoPaymentAgentInfoTypeValue;
-use \libphonenumber\PhoneNumberUtil;
-use \libphonenumber\PhoneNumberFormat;
-use \libphonenumber\PhoneNumber;
+use Rarus\Online\Kkt\Queue\DTO\AgentInfoPaymentAgentInfoType;
+use Rarus\Online\Kkt\Queue\DTO\AgentInfoPaymentAgentInfoTypeValue;
+use libphonenumber\PhoneNumberUtil;
+use libphonenumber\PhoneNumberFormat;
+use libphonenumber\PhoneNumber;
 
 /**
  * Class Inn

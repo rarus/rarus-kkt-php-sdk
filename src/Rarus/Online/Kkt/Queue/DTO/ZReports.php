@@ -6,6 +6,8 @@ declare(strict_types=1);
 
 namespace Rarus\Online\Kkt\Queue\DTO;
 
+use DateTime;
+
 /**
  * Class ZReports
  *
@@ -14,7 +16,7 @@ namespace Rarus\Online\Kkt\Queue\DTO;
 class ZReports
 {
     /**
-     * @var \DateTime время z-отчета
+     * @var DateTime время z-отчета
      */
     protected $timeStampUts;
     /**
@@ -29,11 +31,11 @@ class ZReports
     /**
      * ZReports constructor.
      *
-     * @param \DateTime $timeStampUts
+     * @param DateTime $timeStampUts
      * @param int       $fiscalShiftNum
      * @param int       $fiscalDocNum
      */
-    public function __construct(\DateTime $timeStampUts, int $fiscalShiftNum, int $fiscalDocNum)
+    public function __construct(DateTime $timeStampUts, int $fiscalShiftNum, int $fiscalDocNum)
     {
         $this->setTimeStampUts($timeStampUts);
         $this->setFiscalShiftNum($fiscalShiftNum);
@@ -53,19 +55,19 @@ class ZReports
     }
 
     /**
-     * @return \DateTime
+     * @return DateTime
      */
-    public function getTimeStampUts(): \DateTime
+    public function getTimeStampUts(): DateTime
     {
         return $this->timeStampUts;
     }
 
     /**
-     * @param \DateTime $timeStampUts
+     * @param DateTime $timeStampUts
      *
      * @return \Rarus\Online\Kkt\Queue\DTO\ZReports
      */
-    public function setTimeStampUts(\DateTime $timeStampUts): ZReports
+    public function setTimeStampUts(DateTime $timeStampUts): ZReports
     {
         $this->timeStampUts = $timeStampUts;
         return $this;

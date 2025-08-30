@@ -9,7 +9,11 @@ declare(strict_types=1);
 
 require_once __DIR__ . '/init.php';
 
-use \Rarus\Online\Kkt\Service\Transport as ServiceTransport;
+use Rarus\Online\Kkt\ApiClient;
+use Rarus\Online\Kkt\Service\Transport as ServiceTransport;
+
+global $log;
+global $apiClient;
 
 $serviceTransport = new ServiceTransport($apiClient, $log);
 $versionCollection = $serviceTransport->getVersions('versions', 'get');

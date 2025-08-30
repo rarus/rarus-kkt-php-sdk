@@ -28,7 +28,7 @@ class ApiClient
     /**
      * @var string SDK version
      */
-    const SDK_VERSION = '2.1.2';
+    const SDK_VERSION = '2.1.4';
 
     /**
      * @var string user agent
@@ -176,7 +176,7 @@ class ApiClient
 
         try {
             $this->log->debug(
-                'rarus.online.kkt.apiClient.sendRequest',
+                'rarus.online.kkt.apiClient.sendRequest:request',
                 [
                     'url'     => $this->apiEndpoint . $apiMethod,
                     'method'  => $apiMethod,
@@ -191,7 +191,7 @@ class ApiClient
             );
 
             $this->log->debug(
-                'rarus.online.kkt.apiClient.sendRequest.response',
+                'rarus.online.kkt.apiClient.sendRequest:response',
                 [
                     'response'     => $obResponse->getStatusCode(),
                     'reasonPhrase' => $obResponse->getReasonPhrase()
@@ -203,14 +203,12 @@ class ApiClient
 
             $arResult = $this->decodeApiJsonResponse($obResponseBody->getContents());
 
-        } catch (ClientException $e) {
-            $this->handleApiErrors($e);
-        } catch (BadResponseException $e) {
+        } catch (ClientException|BadResponseException $e) {
             $this->handleApiErrors($e);
         }
 
         $this->log->debug(
-            'rarus.online.kkt.apiClient.sendRequest.Result',
+            'rarus.online.kkt.apiClient.sendRequest:result',
             [
                 'arResult' => $arResult
             ]
@@ -277,7 +275,7 @@ class ApiClient
     {
         // handling server-side API errors: empty response
         if ($jsonApiResponse === '') {
-            $errorMsg = \sprintf('empty response from server');
+            $errorMsg = 'empty response from server';
             $this->log->error($errorMsg);
         }
         // handling json_decode errors

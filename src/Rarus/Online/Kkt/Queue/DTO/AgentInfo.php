@@ -9,12 +9,12 @@ declare(strict_types=1);
 namespace Rarus\Online\Kkt\Queue\DTO;
 
 use Money\Money;
-use \Rarus\Online\Kkt\Queue\DTO\AgentInfoPaymentAgentInfoType;
-use \Rarus\Online\Kkt\Queue\DTO\AgentInfoPaymentAgentInfoTypeValue;
-use \Rarus\Online\Kkt\Queue\DTO\AgentInfoPaymentTransferInfo;
-use \libphonenumber\PhoneNumberUtil;
-use \libphonenumber\PhoneNumberFormat;
-use \libphonenumber\PhoneNumber;
+use Rarus\Online\Kkt\Queue\DTO\AgentInfoPaymentAgentInfoType;
+use Rarus\Online\Kkt\Queue\DTO\AgentInfoPaymentAgentInfoTypeValue;
+use Rarus\Online\Kkt\Queue\DTO\AgentInfoPaymentTransferInfo;
+use libphonenumber\PhoneNumberUtil;
+use libphonenumber\PhoneNumberFormat;
+use libphonenumber\PhoneNumber;
 
 /**
  * Class AgentInfo
@@ -66,7 +66,7 @@ class AgentInfo
     public function toArray(): array
     {
         return [
-            'type' => $this->getType(),
+            'type' => $this->getType()? $this->getType()->value() : '',
             'payment_agent_info' => $this->getPaymentAgentInfo()->toArray(),
             'payment_acceptor_info' => [
                 'phone' => $this->getPhoneNumber()
@@ -74,11 +74,8 @@ class AgentInfo
             'payment_transfer_info' => $this->getPaymentTransferInfo()->toArray()
         ];
     }
-
-    /**
-     * @return string
-     */
-    public function getType(): string
+    
+    public function getType(): ?AgentInfoPaymentAgentInfoTypeValue
     {
         return $this->type;
     }
@@ -90,13 +87,11 @@ class AgentInfo
      */
     protected function setType(?AgentInfoPaymentAgentInfoTypeValue $type): AgentInfo
     {
-        if ($type === null) {
-            $type = '';
-        } else {
-            $AgentInfoPaymentAgentInfoType = new AgentInfoPaymentAgentInfoType();
-            $type = $AgentInfoPaymentAgentInfoType->isPaymentAgentInfoType($type);
-        }
+        // legacy
+        //$AgentInfoPaymentAgentInfoType = new AgentInfoPaymentAgentInfoType();
+        //$this->type = $AgentInfoPaymentAgentInfoType->getPaymentAgentInfoTypeString($type);
         $this->type = $type;
+        
         return $this;
     }
 

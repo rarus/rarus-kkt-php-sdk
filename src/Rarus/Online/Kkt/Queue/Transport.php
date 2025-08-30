@@ -13,6 +13,7 @@ use Rarus\Online\Kkt\{
     Service\DTO\Version,
     Service\DTO\VersionCollection
 };
+use DateTime;
 use Psr\Log\LoggerInterface;
 use Rarus\Online\Kkt\Queue\DTO\{
     ZReports,
@@ -24,9 +25,21 @@ use Rarus\Online\Kkt\Queue\DTO\{
     ZReportCollection
 };
 use Money\Currencies\ISOCurrencies;
-use Money\Parser\DecimalMoneyParser;
+use Money\Currency;
 use Money\Exception\ParserException;
 use Money\Formatter\DecimalMoneyFormatter;
+use Money\Parser\DecimalMoneyParser;
+
+use function array_merge;
+use function count;
+use function ini_get;
+use function ini_set;
+use function json_encode;
+use function sprintf;
+
+use const JSON_UNESCAPED_SLASHES;
+use const JSON_UNESCAPED_UNICODE;
+
 
 /**
  * Class Transport
@@ -54,23 +67,23 @@ class Transport extends AbstractTransport
      * Метод получает список z-отчетов за период,
      * которые были сформированы фермой ККТ с указанным идентификатором api_key
      *
-     * @param \DateTime $from - Начало периода формирования отчета
-     * @param \DateTime $to   - Конец периода формирования отчета
+     * @param DateTime $from - Начало периода формирования отчета
+     * @param DateTime $to   - Конец периода формирования отчета
      *
      * @return \Rarus\Online\Kkt\Queue\DTO\ZReportCollection
      */
-    public function getZReports(\DateTime $from, \DateTime $to): ZReportCollection
+    public function getZReports(DateTime $from, DateTime $to): ZReportCollection
     {
         $this->log->info(
             'rarus.online.kkt.Queue.Transport.' . __FUNCTION__ . '.start',
             [
-                'from' => $from->format(\DateTime::ATOM),
-                'to'   => \DateTime::ATOM
+                'from' => $from->format(DateTime::ATOM),
+                'to'   => DateTime::ATOM
             ]
         );
 
         $zReports = $this->makeRequest(
-            \sprintf(
+            sprintf(
                 'reports/z?from=%s&to=%s',
                 (string)$from->getTimestamp(),
                 (string)$to->getTimestamp()
@@ -84,10 +97,10 @@ class Transport extends AbstractTransport
 
         $zReportsCollection = new ZReportCollection();
 
-        if (\count($zReports) > 0) {
+        if (count($zReports) > 0) {
             foreach ((array)$zReports as $zReport) {
                 $zReportDto = new ZReports(
-                    (new \DateTime())->setTimestamp($zReport['timestamp_uts']),
+                    (new DateTime())->setTimestamp($zReport['timestamp_uts']),
                     (int)$zReport['fiscal_shift_num'],
                     (int)$zReport['fiscal_doc_num']
                 );
@@ -137,27 +150,26 @@ class Transport extends AbstractTransport
             $items['items'][$key]['tax_sum'] = (float)$moneyFormatter->format($items['items'][$key]['tax_sum']);
         }
 
-        $documentArray = \array_merge($document->toArray(), $items);
+        $documentArray = array_merge($document->toArray(), $items);
 
 
         // Получаем текущее значение serialize_precision из php.ini
-        $serializePrecision = \ini_get('serialize_precision');
+        $serializePrecision = ini_get('serialize_precision');
 
         $documentArray['total'] = (float)$moneyFormatter->format($documentArray['total']);
         // Устанавливаем значение serialize_precision в -1.
         // TODO на данный момент есть баг с преобразованием float в json_encode,
         // TODO хотя пишут что Status: Closed https://bugs.php.net/bug.php?id=72567
-        \ini_set('serialize_precision', '-1');
+        ini_set('serialize_precision', '-1');
 
-        $this->log->info('rarus.online.kkt.Queue.Transport.' . __FUNCTION__ . '.documentArray', ['$documentArray' => $documentArray]);
+        $this->log->info('rarus.online.kkt.Queue.Transport.' . __FUNCTION__ . ':documentArray', ['$documentArray' => $documentArray]);
 
-        $body = \json_encode($documentArray, \JSON_UNESCAPED_SLASHES | \JSON_UNESCAPED_UNICODE);
+        $body = json_encode($documentArray, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
 
         // Устанавливаем обратно значение serialize_precision
-        \ini_set('serialize_precision', $serializePrecision);
+        ini_set('serialize_precision', $serializePrecision);
 
-
-        $this->log->info('rarus.online.kkt.Queue.Transport.' . __FUNCTION__ . '.body', ['body' => $body]);
+        $this->log->info('rarus.online.kkt.Queue.Transport.' . __FUNCTION__ . ':body', ['body' => $body]);
 
 
         $documentResult = $this->makeRequest(
@@ -191,7 +203,7 @@ class Transport extends AbstractTransport
         $this->log->info('rarus.online.kkt.Queue.Transport.' . __FUNCTION__ . '.start');
 
         $documentState = $this->makeRequest(
-            \sprintf(
+            sprintf(
                 'document/%s',
                 $operationState->getExternalOperationId()
             ),
@@ -210,8 +222,9 @@ class Transport extends AbstractTransport
 
 
         $moneyParser = new DecimalMoneyParser(new ISOCurrencies());
-
-        $total = $moneyParser->parse((string)$documentState['fiscalization']['total'], 'RUB');
+        $moneyCurrency = new Currency('RUB');
+        
+        $total = $moneyParser->parse((string)$documentState['fiscalization']['total'], $moneyCurrency);
         $credit = (string)$documentState['fiscalization']['credit'];
         $advance_payment = (string)$documentState['fiscalization']['advance_payment'];
         $cash = (string)$documentState['fiscalization']['cash'];
