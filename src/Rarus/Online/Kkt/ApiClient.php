@@ -28,7 +28,7 @@ class ApiClient
     /**
      * @var string SDK version
      */
-    const SDK_VERSION = '2.1.2';
+    const SDK_VERSION = '2.1.4';
 
     /**
      * @var string user agent
