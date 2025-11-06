@@ -229,8 +229,8 @@ class Document
             'advance_payment'        => $this->getAdvancePayment(),
             'cash'                   => $this->getCash(),
             'barter'                 => $this->getBarter(),
-            'tag_1125'               => $this->getTag1125InternetPaymentSign(),
-            'tag_1011'               => $this->getTag1011TimeZonePlaceOfPayment()
+            'tag_1125'               => (int)$this->getTag1125InternetPaymentSign(), //fix kkt-api issue typecast
+            'tag_1011'               => (int)$this->getTag1011TimeZonePlaceOfPayment() //fix kkt-api issue typecast
         ];
     }
 
